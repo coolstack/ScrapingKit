@@ -12,6 +12,7 @@ import time
 import redis
 import pickle
 import schedule
+import json
 
 # Create your views here.
 ####################################################################
@@ -141,11 +142,14 @@ def index(request):
 def targetscrape(request,symbol,duration,num):
     n = 0
     ret = []
-    while n == 0:
-        ret = getData(symbol,num,duration)
-        n = len(ret)
-        print(n)
-        continue
-    return HttpResponse(ret)
+    try:
+        while n == 0:
+            ret = getData(symbol,num,duration)
+            n = len(ret)
+            print(n)
+            continue
+    except Exception as e:
+        print('Error on targetscrape(): '+str(e))
+    return HttpResponse(json.dumps(ret))
 
 
