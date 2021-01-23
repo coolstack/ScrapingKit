@@ -395,12 +395,6 @@ def get_team_info(league,team_id):
 		if id == -1 :
 			continue
 		injuries.append(id)
-	print(leaders)
-	print('*******************')
-	print(members)
-	print('*******************')
-	print(injuries)
-	print('*******************')
 	return leaders, members, injuries
 
 def get_standings(league, season_year, college_division=None):
@@ -496,6 +490,14 @@ def get_cached_url(url, league, data_type, cached_path, headers={}):
                     f.write(data.prettify())
     return data
 
+def get_score(league, date):
+	url = 'https://www.espn.com/'+league+'/scoreboard/_/date/' + date
+	print(url)
+	page = requests.get(url)
+	soup = BeautifulSoup(page.content, 'html.parser')
+	scoreSoup = soup.find_all("th")
+	print(scoreSoup)
+
 def get_fighter(id):
 	url = 'https://www.espn.com/mma/fighter/_/id/'+id
 	print(url)
@@ -546,12 +548,16 @@ def get_fighter_list():
 def ppjson(data):
     print(json.dumps(data, indent=2, sort_keys=True))
 
+def get_game_state(league, id):
+	url = 'https://www.espn.com/'+league+'/boxscore?gameId='+id
+	soup = get_soup(retry_request(url))
+	
+
+print(get_current_scoreboard_urls('nfl'))
+#print(get_date_scoreboard_url('nba','20200114'))
+#get_score('nba','20210118')
 #print(get_fighter_list())
-print(get_fighter('2960681'))
-print('*************')
-print(get_fighter('3043549'))
-print('*************')
-print(get_fighter('3165122'))
+#print(get_fighter('3165122'))
 #print(get_date_scoreboard_url('nba','20200114'))
 #print(get_player_stat('mlb','36724'))
 #print(get_team_info("nba","bos"))
